@@ -20,7 +20,7 @@ The model is published and available for use on the Hugging Face Model Hub: [alu
 
 ## DESIGN DECISIONS AND CHALLENGES
 
-**The Class Imbalance Problem:** The Olist dataset is heavily skewed towards positive reviews. The model achieved 84% accuracy but struggled with the "Neutral" class (F1-score 0.10). This is a classic NLP challenge. I know that just looking at accuracy is a trap here. Future work would definitely include class weighting or oversampling the minority class to help it recognize those neutral comments better.
+**The Class Imbalance Solution (Class Weights):** The Olist dataset is heavily skewed towards positive reviews. To prevent the model from ignoring the "Neutral" class, I implemented **Class Weights** in the loss function. This forces the model to penalize errors on the minority class more heavily. As a result, the Macro F1-Score improved significantly (from 0.62 to 0.70), making the model much more reliable for detecting neutral reviews.
 
 **The Pipeline Refactor (Separation of Concerns):** At first, my `train.py` script was a mess. It was responsible for loading the raw Olist CSV, cleaning the text, creating the labels, splitting the data, and then finally training the model—all in one go. I realized this was inefficient and fragile. So, I redid the architecture: the data preparation is now handled exclusively by the Jupyter Notebook, which outputs clean `train.csv`, `val.csv`, and `test.csv` files. Now, `train.py` simply loads these pre-processed files. It makes the training script so much cleaner and easier to debug.
 
