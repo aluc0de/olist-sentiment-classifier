@@ -15,6 +15,7 @@ The model is published and available for use on the Hugging Face Model Hub: [alu
 - Fine-tuning of BERTimbau (Portuguese BERT) for 3-class classification.
 - Evaluation using Accuracy, Precision, Recall, F1-Score, and Confusion Matrix.
 - Model published on Hugging Face.
+- Interactive web interface built with Gradio.
 - Modular codebase for training and inference.
 
 ## DESIGN DECISIONS AND CHALLENGES
@@ -23,9 +24,9 @@ The model is published and available for use on the Hugging Face Model Hub: [alu
 
 **The Pipeline Refactor (Separation of Concerns):** At first, my `train.py` script was a mess. It was responsible for loading the raw Olist CSV, cleaning the text, creating the labels, splitting the data, and then finally training the model—all in one go. I realized this was inefficient and fragile. So, I redid the architecture: the data preparation is now handled exclusively by the Jupyter Notebook, which outputs clean `train.csv`, `val.csv`, and `test.csv` files. Now, `train.py` simply loads these pre-processed files. It makes the training script so much cleaner and easier to debug.
 
-**The GPU Dilemma:** My local machine has an AMD GPU, which means setting up PyTorch with ROCm on Windows would have been a huge headache. Instead of spending days configuring the environment, I just used Google Colab's free T4 GPU to fine-tune the model in about 30 minutes. 
+**The GPU Dilemma:** My local machine has an AMD GPU, which means setting up PyTorch with ROCm on Windows would have been a huge headache. Instead of spending days configuring the environment, I just used Google Colab's free T4 GPU to fine-tune the model in about 30 minutes.
 
-**Label Derivation:** The sentiment labels were not manually annotated by me. They were derived from the `review_score` column (1-2 = Negative, 3 = Neutral, 4-5 = Positive). This means ironic or nuanced comments might be misclassified. I made sure to document this limitation clearly in the Model Card.
+**Label Derivation:** The sentiment labels were not manually annotated by me. They were derived from the `review_score` column (1-2 = Negative, 3 = Neutral, 4-5 = Positive). This means ironic or nuanced comments might be misclassified. For example, a factual phrase like "The product arrived" might be classified as Positive because it's often associated with high ratings in the dataset, even if it doesn't express a strong opinion. I made sure to document this limitation clearly in the Model Card.
 
 ## PROJECT FILES
 
@@ -33,6 +34,7 @@ The model is published and available for use on the Hugging Face Model Hub: [alu
 - `src/preprocessing.py`: Functions for text cleaning and label creation (used by the notebook).
 - `src/train.py`: Fine-tuning script for the BERTimbau model (expects the pre-processed CSVs).
 - `src/predict.py`: Inference script that loads the model from Hugging Face and classifies new text.
+- `app.py`: Gradio web interface for interactive testing.
 - `README.md`: This file.
 - `requirements.txt`: Project dependencies.
 
