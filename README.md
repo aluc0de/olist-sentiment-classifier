@@ -45,7 +45,7 @@ You can test the model interactively using the web interface built with Gradio.
 To run it locally:
 1. Install the dependencies: `pip install -r requirements.txt`
 2. Run the app: `python app.py`
-3. Open the link provided in the terminal (usually `http://127.0.0.1:7860`).
+3. Open the link provided in the terminal (usually `http://XXX.X.X.X:XXXX`).
 
 ![Web Interface](olist-sentiment-classifier.png)
 *The web interface classifying a sample review.*
